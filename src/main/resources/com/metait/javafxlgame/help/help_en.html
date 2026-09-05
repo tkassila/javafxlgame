@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>L Game Help</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            color: #0f172a;
+        }
+        h1 {
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 10px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .caption {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>L Game</h1>
+
+    <h2>Gameplay & Controls</h2>
+    <p>This game can store unfinished and finished game sessions with current game situations. You can select an entry from the list in the menu to see stored sessions and their game boards. You can also delete older game sessions by clicking the trash bin icon on the row. Select an unfinished game to continue from where the players left off.</p>
+
+    <h3>Rules & Controls</h3>
+    <p>In the game, 2 players each have one L-piece. Player 1's L-piece is red (marked with white number 1) and Player 2's L-piece is blue (marked with white number 2). There are also 2 neutral black coins on the board.</p>
+
+    <p>In this game, the L-piece is controlled using the mouse and keyboard. Move the L-piece outline frame to the desired position using the mouse pointer. You can rotate the frame using the mouse scroll wheel or the R key (or the Rotate button). You can flip the frame by double-clicking it or using the F key (or the Flip button). Place the L-piece in the desired cells by clicking the mouse, and confirm the move by pressing the V or Enter key (or the Confirm button). You can lift the draft-placed L-piece back to the mouse pointer by pressing the cancel key (Escape, C, or Backspace). After moving the L-piece, you can optionally move a coin by clicking the coin and then clicking the desired empty cell, or skip this phase by pressing the S key (or the Skip button).</p>
+
+    <div class="image-container">
+        <img src="L_Game_start_position.svg.png" alt="L Game Start Position">
+        <div class="caption">L game board and starting setup, with neutral pieces shown as black discs.</div>
+    </div>
+
+    <h2>From Wikipedia</h2>
+    <p>The L game is a simple abstract strategy board game invented by Edward de Bono. It was introduced in his book The Five-Day Course in Thinking (1967).</p>
+
+    <h3>Description</h3>
+    <p>The L game is a two-player game played on a board of 4×4 squares. Each player has a 3×2 L-shaped tetromino, and there are two 1×1 neutral pieces.</p>
+
+    <h3>Rules</h3>
+    <p>On each turn, a player must first move their L piece, and then may optionally move either one of the neutral pieces. The game is won by leaving the opponent unable to move their L piece to a new position.</p>
+
+    <p>Pieces may not overlap or cover other pieces, or let the pieces off the board. On moving the L piece, it is picked up and then placed in empty squares anywhere on the board. It may be rotated or even flipped over in doing so; the only rule is that it must end in a different position from the position it started—thus covering at least one square it did not previously cover. To move a neutral piece, a player simply picks it up then places it in an empty square anywhere on the board.</p>
+
+    <h2>Strategy</h2>
+    <p>One basic strategy is to use a neutral piece and one's own piece to block a 3×3 square in one corner, and use a neutral piece to prevent the opponent's L piece from swapping to a mirror-image position. Another basic strategy is to move an L piece to block a half of the board, and use the neutral pieces to prevent the opponent's possible alternate positions.</p>
+    <p>These positions can often be achieved once a neutral piece is left in one of the eight killer spaces on the perimeter of the board. The killer spaces are the spaces on the perimeter, but not in a corner. On the next move, one either makes the previously placed killer a part of one's square, or uses it to block a perimeter position, and makes a square or half-board block with one's own L and a moved neutral piece.</p>
+
+    <h2>Analysis</h2>
+    <p>All positions, Red to move, where Red will lose to a perfect Blue, and maximum number of moves remaining for Red. By looking ahead one move and ensuring one never ends up in any of the above positions, one can avoid losing.</p>
+
+    <div class="image-container">
+        <img src="560px-L_Game_all_final_positions.svg.png" alt="Losing Positions">
+        <div class="caption">All positions, Red to move, where Red will lose to a perfect Blue.</div>
+    </div>
+
+    <p>All possible final positions, Blue has won.</p>
+
+    <div class="image-container">
+        <img src="560px-L_Game_mate_positions.svg.png" alt="Mate Positions">
+        <div class="caption">All possible final positions (mate positions) where Blue has won.</div>
+    </div>
+
+    <p>In a game with two perfect players, neither will ever win or lose. The L game is small enough to be completely solvable. There are 2296 different possible valid ways the pieces can be arranged, not counting a rotation or mirror of an arrangement as a new arrangement, and considering the two neutral pieces to be identical. Any arrangement can be reached during the game, with it being any player's turn. Each player has lost in 15 of these arrangements, if it is that player's turn. The losing arrangements involve the losing player's L piece touching a corner. Each player will also soon lose to a perfect player in an additional 14 arrangements. A player will be able to at least force a draw (by playing forever without losing) from the remaining 2267 positions.</p>
+    <p>Even if neither player plays perfectly, defensive play can continue indefinitely if the players are too cautious to move a neutral piece to the killer positions. If both players are at this level, a sudden-death variant of the rules permits one to move both neutral pieces after moving. A player who can look three moves ahead can defeat defensive play using the standard rules.[clarification needed]</p>
+
+    <h2>References</h2>
+    <p>"Games and Puzzles 1974-11: Iss 30". A H C Publications. November 1974.</p>
+    <p>de Bono, Edward (1967). "The L Game: Strategic Thinking". The Five-Day Course in Thinking. Basic Books Inc. pp. 149–206. LCCN 67027438.</p>
+    <p>Parlett, David (1999). "The L-Game". The Oxford History of Board Games. Oxford University Press Inc. pp. 161–62. ISBN 0-19-212998-8.</p>
+    <p>Pritchard, D. B. (1982). "The L Game". Brain Games. Penguin Books Ltd. pp. 107–12. ISBN 0-14-00-5682-3.</p>
+
+    <h2>External links</h2>
+    <p>L game on Edward de Bono's official site (archived)</p>
+    <p>Interactive web-based L game written in JavaScript</p>
+</body>
+</html>

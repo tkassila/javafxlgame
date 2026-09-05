@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hjälp till L-spel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            color: #0f172a;
+        }
+        h1 {
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 10px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .caption {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>L-spel</h1>
+
+    <h2>Spelregler och Kontroller</h2>
+    <p>Detta spel kan lagra avslutade/oavslutade spelsessioner med aktuell spelsituation. Välj det alternativet i menyn för att se en lista över sparade sessioner och spelbrädor. Du kan också ta bort gamla spelsessioner genom att trycka på papperskorgen på raden. Du kan välja ett oavslutat spel för att fortsätta spelet där spelarna lämnade det valda spelet.</p>
+
+    <h3>Efter att ha startat ett nytt L-spel</h3>
+    <p>2 spelare har varsin L-pjäs. L-pjäsen för Spelare 1 är markerad med en vit siffra 1 och har färgen röd. Spelare 2 har markerats med en vit siffra 2 och har färgen blå. Det finns också 2 neutrala svarta pjäser (mynt).</p>
+
+    <p>I detta spel styrs L-pjäsen med musen och tangentbordet. Flytta L-pjäsens konturram till önskad position med muspekaren. Du kan rotera ramen med musens rullhjul eller R-tangenten (eller Rotera-knappen). Du kan vänd ramen genom att dubbelklicka på den eller använda F-tangenten (eller Vänd-knappen). Placera L-pjäsen i önskade rutor genom att klicka med musen, och bekräfta draget genom att trycka på V- eller Enter-tangenten (eller Bekräfta-knappen). Du kan lyfta tillbaka den placerade L-pjäsen till muspekaren genom att trycka på avbryt-tangenten (Escape, C eller Backspace). Efter att ha flyttat L-pjäsen kan du valfritt flytta ett mynt genom att klicka på myntet och sedan klicka på den önskade tomma rutan, eller hoppa över denna fas genom att trycka på S-tangenten (eller Hoppa över-knappen).</p>
+
+    <div class="image-container">
+        <img src="L_Game_start_position.svg.png" alt="L-spel Start Position">
+        <div class="caption">L-spelbräde och startuppställning, med neutrala pjäser visade som svarta diskar.</div>
+    </div>
+
+    <h2>Från Wikipedia</h2>
+    <p>L-spelet är ett enkelt abstrakt strategibrädspel uppfunnet av Edward de Bono. Det introducerades i hans bok The Five-Day Course in Thinking (1967).</p>
+
+    <h3>Beskrivning</h3>
+    <p>L-spelet är ett spel för två spelare som spelas på ett bräde med 4×4 rutor. Varje spelare har en 3×2 L-formad tetromino, och det finns två 1×1 neutrala pjäser.</p>
+
+    <h3>Regler</h3>
+    <p>Vid varje tur måste en spelare först flytta sin L-pjäs, och kan sedan valfritt flytta någon av de neutrala pjäserna. Spelet vinns genom att lämna motståndaren oförmögen att flytta sin L-pjäs till en ny position.</p>
+
+    <p>Pjäser får inte överlappa eller täcka andra pjäser, och pjäserna får inte hamna utanför brädet. När man flyttar L-pjäsen plockas den upp och placeras sedan i tomma rutor var som helst på brädet. Den kan roteras eller till och med vändas när man gör det; den enda regeln är att den måste hamna i en annan position än den position den startade i – och täcker därmed minst en ruta den inte tidigare täckte. För att flytta en neutral pjäs plockar en spelare helt enkelt upp den och placerar den sedan i en tom ruta var som helst på brädet.</p>
+
+    <h2>Strategi</h2>
+    <p>En grundläggande strategi är att använda en neutral pjäs och sin egen pjäs för att blockera en 3×3-ruta i ett hörn, och använda en neutral pjäs för att förhindra motståndarens L-pjäs från att byta till en spegelvänd position. En annan grundläggande strategi är att flytta en L-pjäs för att blockera hälften av brädet och använda de neutrala pjäserna för att förhindra motståndarens möjliga alternativa positioner.</p>
+    <p>Dessa positioner kan ofta uppnås när en neutral pjäs lämnas i en av de åtta mördarplatserna på brädets omkrets. Mördarplatserna är platserna på omkretsen, men inte i ett hörn. Vid nästa drag gör man antingen den tidigare placerade mördaren till en del av ens ruta, eller använder den för att blockera en omkretsposition, och gör ett kvadrat- eller halvbrädesblock med sitt eget L och en flyttad neutral pjäs.</p>
+
+    <h2>Analys</h2>
+    <p>Alla positioner, Röd att flytta, där Röd kommer att förlora mot en perfekt Blå, och maximalt antal drag kvar för Röd. Genom att titta framåt ett drag och se till att man aldrig hamnar i någon av ovanstående positioner kan man undvika att förlora.</p>
+
+    <div class="image-container">
+        <img src="560px-L_Game_all_final_positions.svg.png" alt="Förlorande Positioner">
+        <div class="caption">Alla positioner, Röd att flytta, där Röd kommer att förlora mot en perfekt Blå.</div>
+    </div>
+
+    <p>Alla möjliga slutpositioner, Blå har vunnit.</p>
+
+    <div class="image-container">
+        <img src="560px-L_Game_mate_positions.svg.png" alt="Matti-positioner">
+        <div class="caption">Alla möjliga slutpositioner (matti-positioner) där Blå har vunnit.</div>
+    </div>
+
+    <p>I ett spel med två perfekta spelare kommer ingen någonsin att vinna eller förlora. L-spelet är tillräckligt litet för att vara fullständigt lösbart. Det finns 2296 olika möjliga giltiga sätt pjäserna kan arrangeras på, utan att räkna en rotation eller spegling av ett arrangemang som ett nytt arrangemang, och betrakta de två neutrala pjäserna som identiska. Vilket arrangemang som helst kan nås under spelets gång, oavsett vems tur det är. Varje spelare har förlorat i 15 av dessa arrangemang, om det är den spelarens tur. De förlorande arrangemangen innebär att den förlorande spelarens L-pjäs rör vid ett hörn. Varje spelare kommer också snart att förlora mot en perfekt spelare i ytterligare 14 arrangemang. En spelare kommer att kunna åtminstone tvinga fram oavgjort (genom att spela för evigt utan att förlora) från de återstående 2267 positionerna.</p>
+    <p>Även om ingen av spelarna spelar perfekt, kan defensivt spel fortsätta på obestämd tid om spelarna är för försiktiga för att flytta en neutral pjäs till mördarpositionerna. Om båda spelarna är på denna nivå tillåter en sudden death-variant av reglerna att man flyttar båda neutrala pjäserna efter att ha flyttat. En spelare som kan se tre drag framåt kan besegra defensivt spel med standardreglerna.</p>
+
+    <h2>Referenser</h2>
+    <p>"Games and Puzzles 1974-11: Iss 30". A H C Publications. November 1974.</p>
+    <p>de Bono, Edward (1967). "The L Game: Strategic Thinking". The Five-Day Course in Thinking. Basic Books Inc. pp. 149–206. LCCN 67027438.</p>
+    <p>Parlett, David (1999). "The L-Game". The Oxford History of Board Games. Oxford University Press Inc. pp. 161–62. ISBN 0-19-212998-8.</p>
+    <p>Pritchard, D. B. (1982). "The L-Game". Brain Games. Penguin Books Ltd. pp. 107–12. ISBN 0-14-00-5682-3.</p>
+
+    <h2>Externa länkar</h2>
+    <p>L-spel på Edward de Bonos officiella webbplats (arkiverad)</p>
+    <p>Interaktivt webbaserat L-spel skrivet i JavaScript</p>
+</body>
+</html>

@@ -1,0 +1,67 @@
+.root-pane {
+    -fx-background-color: #c4b5fd;
+}
+
+.game-title {
+    -fx-font-family: "Outfit", "Inter", "Segoe UI", sans-serif;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+    -fx-alignment: center;
+}
+
+.board-container {
+    -fx-background-color: #c4b5fd;
+    -fx-border-color: #000000;
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-background-radius: 12px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 10, 0, 0, 4);
+    -fx-padding: 15px;
+}
+
+.button-bar {
+    -fx-padding: 15px;
+    -fx-background-color: #c4b5fd;
+    -fx-border-color: #000000;
+    -fx-border-width: 1px 0 0 0;
+}
+
+.status-alert {
+    -fx-font-family: "Inter", "Segoe UI", sans-serif;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-padding: 10px;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-text-fill: #000000;
+}
+
+.alert,
+.alert-danger,
+.alert-success,
+.alert-primary,
+.alert-warning,
+.alert-info {
+    -fx-text-fill: #000000;
+}
+
+/* Force black text color for Vahvista (Confirm) and Ohita (Skip) buttons */
+.button-bar .btn-success,
+.button-bar .btn-warning {
+    -fx-text-fill: #000000;
+}
+
+.alert-empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: transparent;
+}
+
+#error-label {
+    -fx-padding: 2px 10px;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}

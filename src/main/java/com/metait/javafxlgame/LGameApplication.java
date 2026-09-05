@@ -13,11 +13,15 @@ import javafx.scene.shape.Rectangle;
 import java.util.Optional;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
+import javafx.scene.web.WebView;
+import java.net.URL;
 
-public class HelloApplication extends Application {
+public class LGameApplication extends Application {
     private LGameModel model;
     private LGameBoard board;
+    private boolean gameOverAlertShown = false;
 
+    private Label titleLabel;
     private Label statusLabel;
     private Label errorLabel;
     private Button btnRotate;
@@ -26,10 +30,21 @@ public class HelloApplication extends Application {
     private Button btnSkip;
     private Button btnReset;
 
+    private Menu gameMenu;
+    private Menu helpMenu;
+    private MenuItem itemSwitchUnfinished;
+    private MenuItem itemEditNames;
+    private MenuItem itemFinishedList;
+    private MenuItem itemChooseLanguage;
+    private MenuItem itemQuit;
+    private MenuItem itemAbout;
+    private MenuItem itemHelp;
+
     @Override
     public void start(Stage stage) {
         model = new LGameModel();
         model.loadState(); // Restore state from the user's home directory if it exists
+        checkAndHandleGameOverState();
         board = new LGameBoard(model, this);
 
         // Top bar: title and instructions
@@ -37,28 +52,34 @@ public class HelloApplication extends Application {
         topBox.setPadding(new Insets(15, 15, 10, 15));
         topBox.setAlignment(Pos.CENTER);
 
-        Label titleLabel = new Label("L-Peli (L Game)");
+        titleLabel = new Label();
         titleLabel.getStyleClass().add("game-title");
 
         // Create Menu Bar
         MenuBar menuBar = new MenuBar();
-        Menu gameMenu = new Menu("Valikko");
+        gameMenu = new Menu();
+        helpMenu = new Menu();
 
-        MenuItem itemSwitchUnfinished = new MenuItem("Valitse toista keskeneräistä peliä");
-        MenuItem itemEditNames = new MenuItem("Muokkaa pelaajien nimiä");
-        MenuItem itemFinishedList = new MenuItem("Päättyneet pelit");
-        MenuItem itemQuit = new MenuItem("Lopeta peli");
-        MenuItem itemAbout = new MenuItem("Tietoa pelistä");
+        itemSwitchUnfinished = new MenuItem();
+        itemEditNames = new MenuItem();
+        itemFinishedList = new MenuItem();
+        itemChooseLanguage = new MenuItem();
+        itemQuit = new MenuItem();
+        itemAbout = new MenuItem();
+        itemHelp = new MenuItem();
 
-        gameMenu.getItems().addAll(itemSwitchUnfinished, itemEditNames, itemFinishedList, itemQuit, itemAbout);
-        menuBar.getMenus().add(gameMenu);
+        gameMenu.getItems().addAll(itemSwitchUnfinished, itemEditNames, itemFinishedList, itemChooseLanguage, itemQuit, itemAbout);
+        helpMenu.getItems().add(itemHelp);
+        menuBar.getMenus().addAll(gameMenu, helpMenu);
 
         // Bind Menu Actions
         itemSwitchUnfinished.setOnAction(e -> showUnfinishedGamesDialog());
         itemEditNames.setOnAction(e -> showEditNamesDialog());
         itemFinishedList.setOnAction(e -> showFinishedGamesDialog());
+        itemChooseLanguage.setOnAction(e -> showLanguageDialog());
         itemQuit.setOnAction(e -> stage.fireEvent(new javafx.stage.WindowEvent(stage, javafx.stage.WindowEvent.WINDOW_CLOSE_REQUEST)));
         itemAbout.setOnAction(e -> showAboutDialog());
+        itemHelp.setOnAction(e -> showHelpDialog());
 
         statusLabel = new Label();
         statusLabel.getStyleClass().addAll("status-alert", "alert");
@@ -82,22 +103,22 @@ public class HelloApplication extends Application {
         BorderPane.setMargin(boardWrapper, new Insets(5, 20, 5, 20));
 
         // Bottom control buttons
-        btnRotate = new Button("Pyöritä (R)");
+        btnRotate = new Button();
         btnRotate.getStyleClass().addAll("btn", "btn-secondary");
         btnRotate.setOnAction(e -> board.rotateDraftPiece());
 
-        btnFlip = new Button("Peilaa (F)");
+        btnFlip = new Button();
         btnFlip.getStyleClass().addAll("btn", "btn-secondary");
         btnFlip.setOnAction(e -> board.flipDraftPiece());
 
-        btnConfirm = new Button("Vahvista (V)");
+        btnConfirm = new Button();
         btnConfirm.getStyleClass().addAll("btn", "btn-success");
         btnConfirm.setOnAction(e -> {
             board.confirmDraftMove();
             updateUI();
         });
 
-        btnSkip = new Button("Ohita (S)");
+        btnSkip = new Button();
         btnSkip.getStyleClass().addAll("btn", "btn-warning");
         btnSkip.setOnAction(e -> {
             model.skipNeutralMove();
@@ -106,17 +127,18 @@ public class HelloApplication extends Application {
             updateUI();
         });
 
-        btnReset = new Button("Uusi peli (N)");
+        btnReset = new Button();
         btnReset.getStyleClass().addAll("btn", "btn-danger");
         btnReset.setOnAction(e -> {
             if (model.getPhase() != LGameModel.GamePhase.GAME_OVER) {
+                String lang = model.getLanguage();
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Uusi peli");
+                alert.setTitle(LanguageSupport.getTranslation("uusiPeliPromptTitle", lang));
                 alert.setHeaderText(null);
-                alert.setContentText("Aloitetaanko uusi L peli?");
+                alert.setContentText(LanguageSupport.getTranslation("uusiPeliPromptText", lang));
 
-                ButtonType buttonTypeYes = new ButtonType("Kyllä");
-                ButtonType buttonTypeNo = new ButtonType("Ei");
+                ButtonType buttonTypeYes = new ButtonType(LanguageSupport.getTranslation("kylla", lang), ButtonBar.ButtonData.YES);
+                ButtonType buttonTypeNo = new ButtonType(LanguageSupport.getTranslation("ei", lang), ButtonBar.ButtonData.NO);
                 alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
                 Optional<ButtonType> result = alert.showAndWait();
@@ -127,7 +149,9 @@ public class HelloApplication extends Application {
                 // Save current game state to unfinished games list before resetting
                 model.saveCurrentToUnfinished();
             }
+            gameOverAlertShown = false;
             model.resetGame();
+            model.saveState(); // Save new game start state!
             board.resetDraftState();
             board.draw();
             updateUI();
@@ -140,6 +164,7 @@ public class HelloApplication extends Application {
 
         // Error message label placed between board and buttons
         errorLabel = new Label();
+        errorLabel.setId("error-label");
         errorLabel.getStyleClass().setAll("alert-empty");
         errorLabel.setMaxWidth(Double.MAX_VALUE);
         errorLabel.setAlignment(Pos.CENTER);
@@ -161,7 +186,7 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(root, 560, 740);
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         
-        String customStyle = HelloApplication.class.getResource("style.css").toExternalForm();
+        String customStyle = LGameApplication.class.getResource("style.css").toExternalForm();
         if (customStyle != null) {
             scene.getStylesheets().add(customStyle);
         }
@@ -214,12 +239,13 @@ public class HelloApplication extends Application {
     }
 
     private void showEditNamesDialog() {
+        String lang = model.getLanguage();
         Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Pelaajien nimet");
-        dialog.setHeaderText("Muokkaa pelaajien nimiä");
+        dialog.setTitle(LanguageSupport.getTranslation("pelaajienNimet", lang));
+        dialog.setHeaderText(LanguageSupport.getTranslation("muokkaaNimia", lang));
 
-        ButtonType saveButtonType = new ButtonType("Tallenna", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+        ButtonType saveButtonType = new ButtonType(LanguageSupport.getTranslation("tallenna", lang), ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, new ButtonType(LanguageSupport.getTranslation("peruuta", lang), ButtonBar.ButtonData.CANCEL_CLOSE));
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -229,9 +255,9 @@ public class HelloApplication extends Application {
         TextField p1 = new TextField(model.getPlayer1Name());
         TextField p2 = new TextField(model.getPlayer2Name());
 
-        grid.add(new Label("Pelaaja 1 (Punainen):"), 0, 0);
+        grid.add(new Label(LanguageSupport.getTranslation("pelaaja1", lang) + " (" + LanguageSupport.getTranslation("punainen", lang) + "):"), 0, 0);
         grid.add(p1, 1, 0);
-        grid.add(new Label("Pelaaja 2 (Sininen):"), 0, 1);
+        grid.add(new Label(LanguageSupport.getTranslation("pelaaja2", lang) + " (" + LanguageSupport.getTranslation("sininen", lang) + "):"), 0, 1);
         grid.add(p2, 1, 1);
 
         dialog.getDialogPane().setContent(grid);
@@ -240,19 +266,20 @@ public class HelloApplication extends Application {
         if (result.isPresent() && result.get() == saveButtonType) {
             String name1 = p1.getText().trim();
             String name2 = p2.getText().trim();
-            model.setPlayer1Name(name1.isEmpty() ? "Pelaaja 1" : name1);
-            model.setPlayer2Name(name2.isEmpty() ? "Pelaaja 2" : name2);
+            model.setPlayer1Name(name1.isEmpty() ? LanguageSupport.getTranslation("pelaaja1", lang) : name1);
+            model.setPlayer2Name(name2.isEmpty() ? LanguageSupport.getTranslation("pelaaja2", lang) : name2);
             updateUI();
         }
     }
 
     private void showUnfinishedGamesDialog() {
+        String lang = model.getLanguage();
         Dialog<SavedGameState> dialog = new Dialog<>();
-        dialog.setTitle("Keskeneräiset pelit");
-        dialog.setHeaderText("Valitse toinen keskeneräinen peli");
+        dialog.setTitle(LanguageSupport.getTranslation("keskeneraiset", lang));
+        dialog.setHeaderText(LanguageSupport.getTranslation("listaKeskeneraiset", lang));
 
-        ButtonType loadButtonType = new ButtonType("Lataa peli", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(loadButtonType, ButtonType.CANCEL);
+        ButtonType loadButtonType = new ButtonType(LanguageSupport.getTranslation("lataaPeli", lang), ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(loadButtonType, new ButtonType(LanguageSupport.getTranslation("peruuta", lang), ButtonBar.ButtonData.CANCEL_CLOSE));
 
         ListView<SavedGameState> listView = new ListView<>();
         listView.getItems().addAll(model.getUnfinishedGames());
@@ -264,7 +291,7 @@ public class HelloApplication extends Application {
         previewCol.setPadding(new Insets(0, 10, 0, 10));
         previewCol.setPrefWidth(220);
 
-        Label lblPreviewTitle = new Label("Esikatselu");
+        Label lblPreviewTitle = new Label(LanguageSupport.getTranslation("esikatselu", lang));
         lblPreviewTitle.setStyle("-fx-font-weight: bold;");
 
         StackPane previewWrapper = new StackPane();
@@ -317,7 +344,17 @@ public class HelloApplication extends Application {
             if (newVal != null) {
                 previewWrapper.getChildren().add(createCompactPreviewBoard(newVal));
                 String turnName = newVal.isRedTurn ? newVal.player1Name : newVal.player2Name;
-                lblDetails.setText("Pelaajat:\n" + newVal.player1Name + " (Pun) vs\n" + newVal.player2Name + " (Sin)\n\nVuoro: " + turnName);
+                String playerLabel = LanguageSupport.getTranslation("pelaajienNimet", lang);
+                String turnLabel = "Vuoro";
+                if (lang.equals("en")) turnLabel = "Turn";
+                if (lang.equals("sv")) turnLabel = "Tur";
+                if (lang.equals("de")) turnLabel = "Zug";
+                if (lang.equals("es")) turnLabel = "Turno";
+
+                String redAbbr = lang.equals("fi") ? "Pun" : (lang.equals("en") ? "Red" : (lang.equals("sv") ? "Röd" : (lang.equals("de") ? "Rot" : "Rojo")));
+                String blueAbbr = lang.equals("fi") ? "Sin" : (lang.equals("en") ? "Blue" : (lang.equals("sv") ? "Blå" : (lang.equals("de") ? "Blau" : "Azul")));
+
+                lblDetails.setText(playerLabel + ":\n" + newVal.player1Name + " (" + redAbbr + ") vs\n" + newVal.player2Name + " (" + blueAbbr + ")\n\n" + turnLabel + ": " + turnName);
             } else {
                 previewWrapper.getChildren().add(createCompactPreviewBoard(null));
                 lblDetails.setText("");
@@ -343,7 +380,10 @@ public class HelloApplication extends Application {
             // Save the current game to unfinished games *only now* before loading the new one!
             model.saveCurrentToUnfinished();
             
+            gameOverAlertShown = false;
             model.loadGameState(selectedGame);
+            checkAndHandleGameOverState();
+            model.saveState(); // Save active state immediately!
             board.resetDraftState();
             board.draw();
             updateUI();
@@ -351,10 +391,11 @@ public class HelloApplication extends Application {
     }
 
     private void showFinishedGamesDialog() {
+        String lang = model.getLanguage();
         Dialog<ButtonType> dialog = new Dialog<>();
-        dialog.setTitle("Päättyneet pelit");
-        dialog.setHeaderText("Lista päättyneistä peleistä");
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+        dialog.setTitle(LanguageSupport.getTranslation("paattyneet", lang));
+        dialog.setHeaderText(LanguageSupport.getTranslation("listaPaattyneet", lang));
+        dialog.getDialogPane().getButtonTypes().add(new ButtonType(LanguageSupport.getTranslation("peruuta", lang), ButtonBar.ButtonData.CANCEL_CLOSE));
 
         ListView<SavedGameState> listView = new ListView<>();
         listView.getItems().addAll(model.getFinishedGames());
@@ -366,7 +407,7 @@ public class HelloApplication extends Application {
         previewCol.setPadding(new Insets(0, 10, 0, 10));
         previewCol.setPrefWidth(220);
 
-        Label lblPreviewTitle = new Label("Esikatselu");
+        Label lblPreviewTitle = new Label(LanguageSupport.getTranslation("esikatselu", lang));
         lblPreviewTitle.setStyle("-fx-font-weight: bold;");
 
         StackPane previewWrapper = new StackPane();
@@ -419,7 +460,13 @@ public class HelloApplication extends Application {
             if (newVal != null) {
                 previewWrapper.getChildren().add(createCompactPreviewBoard(newVal));
                 String winnerName = newVal.winnerIsRed ? newVal.player1Name : newVal.player2Name;
-                lblDetails.setText("Pelaajat:\n" + newVal.player1Name + " (Pun) vs\n" + newVal.player2Name + " (Sin)\n\nVoittaja: " + winnerName);
+                String playerLabel = LanguageSupport.getTranslation("pelaajienNimet", lang);
+                String winnerLabel = lang.equals("fi") ? "Voittaja" : (lang.equals("en") ? "Winner" : (lang.equals("sv") ? "Vinnare" : (lang.equals("de") ? "Gewinner" : "Ganador")));
+
+                String redAbbr = lang.equals("fi") ? "Pun" : (lang.equals("en") ? "Red" : (lang.equals("sv") ? "Röd" : (lang.equals("de") ? "Rot" : "Rojo")));
+                String blueAbbr = lang.equals("fi") ? "Sin" : (lang.equals("en") ? "Blue" : (lang.equals("sv") ? "Blå" : (lang.equals("de") ? "Blau" : "Azul")));
+
+                lblDetails.setText(playerLabel + ":\n" + newVal.player1Name + " (" + redAbbr + ") vs\n" + newVal.player2Name + " (" + blueAbbr + ")\n\n" + winnerLabel + ": " + winnerName);
             } else {
                 previewWrapper.getChildren().add(createCompactPreviewBoard(null));
                 lblDetails.setText("");
@@ -436,10 +483,11 @@ public class HelloApplication extends Application {
     }
 
     private void showAboutDialog() {
+        String lang = model.getLanguage();
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Tietoa pelistä");
-        alert.setHeaderText("L Game (L-Peli)");
-        alert.setContentText("Versio: 1.0\nTekijä: Edward de Bono (Keksijä)\nSovelluskehitys: Metait / Antigravity AI\n\nL-peli on kahden pelaajan strategiapeli 4x4-ruudukolla.");
+        alert.setTitle(LanguageSupport.getTranslation("tietoaDialogTitle", lang));
+        alert.setHeaderText("L Game (" + LanguageSupport.getTranslation("tietoa", lang) + ")");
+        alert.setContentText(LanguageSupport.getTranslation("tietoaText", lang));
         alert.showAndWait();
     }
 
@@ -483,27 +531,75 @@ public class HelloApplication extends Application {
     private void drawCompactCoin(Pane p, Point coin, double scale) {
         double cx = coin.col * scale + scale / 2;
         double cy = coin.row * scale + scale / 2;
-        Circle c = new Circle(cx, cy, scale * 0.35);
-        c.setFill(Color.web("#4b5563"));
-        c.setStroke(Color.web("#c4b5fd"));
-        c.setStrokeWidth(1.5);
-        p.getChildren().add(c);
+        double radius = scale * 0.35;
+
+        Circle outer = new Circle(cx, cy, radius);
+        outer.setFill(Color.web("#c4b5fd"));
+        outer.setStroke(Color.BLACK);
+        outer.setStrokeWidth(0.8);
+
+        Circle inner = new Circle(cx, cy, radius * 0.65);
+        inner.setFill(Color.BLACK);
+        inner.setStroke(null);
+
+        p.getChildren().addAll(outer, inner);
     }
 
     public void updateUI() {
+        checkAndHandleGameOverState();
+        String lang = model.getLanguage();
         LGameModel.GamePhase phase = model.getPhase();
         boolean isRed = model.isRedTurn();
 
+        // Update title text
+        titleLabel.setText(lang.equals("fi") ? "L-Peli" : "L Game");
+
+        // Update Menus
+        if (gameMenu != null) gameMenu.setText(LanguageSupport.getTranslation("valikko", lang));
+        if (helpMenu != null) helpMenu.setText(LanguageSupport.getTranslation("apua", lang));
+        if (itemSwitchUnfinished != null) itemSwitchUnfinished.setText(LanguageSupport.getTranslation("keskeneraiset", lang));
+        if (itemEditNames != null) itemEditNames.setText(LanguageSupport.getTranslation("muokkaaNimia", lang));
+        if (itemFinishedList != null) itemFinishedList.setText(LanguageSupport.getTranslation("paattyneet", lang));
+        if (itemChooseLanguage != null) itemChooseLanguage.setText(LanguageSupport.getTranslation("valitseKieli", lang));
+        if (itemQuit != null) itemQuit.setText(LanguageSupport.getTranslation("lopeta", lang));
+        if (itemAbout != null) itemAbout.setText(LanguageSupport.getTranslation("tietoa", lang));
+        if (itemHelp != null) itemHelp.setText(LanguageSupport.getTranslation("apuaDialogTitle", lang));
+
+        // Update buttons
+        if (btnRotate != null) btnRotate.setText(LanguageSupport.getTranslation("pyorita", lang));
+        if (btnFlip != null) btnFlip.setText(LanguageSupport.getTranslation("peilaa", lang));
+        if (btnConfirm != null) btnConfirm.setText(LanguageSupport.getTranslation("vahvista", lang));
+        if (btnSkip != null) btnSkip.setText(LanguageSupport.getTranslation("ohita", lang));
+        if (btnReset != null) btnReset.setText(LanguageSupport.getTranslation("uusiPeliBtn", lang));
+
         // Update status bar text and colors
         if (phase == LGameModel.GamePhase.GAME_OVER) {
-            String winner = model.isWinnerIsRed() ? model.getPlayer1Name() + " (Punainen)" : model.getPlayer2Name() + " (Sininen)";
-            statusLabel.setText("PELI PÄÄTTYI! Voittaja: " + winner);
+            String winnerLabel = LanguageSupport.getTranslation("voittaja", lang);
+            String redLabel = LanguageSupport.getTranslation("punainen", lang);
+            String blueLabel = LanguageSupport.getTranslation("sininen", lang);
+            String winner = model.isWinnerIsRed() ? model.getPlayer1Name() + " (" + redLabel + ")" : model.getPlayer2Name() + " (" + blueLabel + ")";
+            
+            String noMovesLostText = LanguageSupport.getTranslation("noMovesLost", lang);
+            statusLabel.setText(noMovesLostText + " " + winnerLabel + winner);
             statusLabel.getStyleClass().setAll("status-alert", "alert", "alert-success");
+
+            if (!gameOverAlertShown) {
+                gameOverAlertShown = true;
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(lang.equals("fi") ? "Peli päättyi" : (lang.equals("sv") ? "Spelet slut" : (lang.equals("de") ? "Spiel beendet" : (lang.equals("es") ? "Juego terminado" : "Game Over"))));
+                alert.setHeaderText(noMovesLostText);
+                alert.setContentText(winnerLabel + winner);
+                ButtonType btnOk = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+                alert.getButtonTypes().setAll(btnOk);
+                alert.showAndWait();
+            }
         } else {
-            String turnPlayer = isRed ? model.getPlayer1Name() + " (Punainen)" : model.getPlayer2Name() + " (Sininen)";
+            String redLabel = LanguageSupport.getTranslation("punainen", lang);
+            String blueLabel = LanguageSupport.getTranslation("sininen", lang);
+            String turnPlayer = isRed ? model.getPlayer1Name() + " (" + redLabel + ")" : model.getPlayer2Name() + " (" + blueLabel + ")";
             String phaseText = (phase == LGameModel.GamePhase.L_MOVE)
-                ? "Aseta L-nappula (R=Pyöritä, F=Peilaa, klikkaa + V=Vahvista)"
-                : "Siirrä kolikkoa (klikkaa kolikkoa + tyhjää ruutua tai S=Ohita)";
+                ? LanguageSupport.getTranslation("asetaL", lang)
+                : LanguageSupport.getTranslation("siirraKolikko", lang);
             statusLabel.setText(turnPlayer + " - " + phaseText);
 
             if (isRed) {
@@ -547,6 +643,133 @@ public class HelloApplication extends Application {
             btnFlip.setDisable(true);
             btnConfirm.setDisable(true);
             btnSkip.setDisable(true);
+        }
+    }
+
+    private void showLanguageDialog() {
+        String lang = model.getLanguage();
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle(LanguageSupport.getTranslation("kieliDialogTitle", lang));
+        dialog.setHeaderText(LanguageSupport.getTranslation("kieliDialogHeader", lang));
+
+        ButtonType confirmButtonType = new ButtonType(LanguageSupport.getTranslation("tallenna", lang), ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(confirmButtonType, new ButtonType(LanguageSupport.getTranslation("peruuta", lang), ButtonBar.ButtonData.CANCEL_CLOSE));
+
+        VBox box = new VBox(10);
+        box.setPadding(new Insets(20));
+
+        ToggleGroup group = new ToggleGroup();
+        RadioButton rbFi = new RadioButton("Suomi fi");
+        rbFi.setToggleGroup(group);
+        rbFi.setUserData("fi");
+
+        RadioButton rbEn = new RadioButton("English en");
+        rbEn.setToggleGroup(group);
+        rbEn.setUserData("en");
+
+        RadioButton rbSv = new RadioButton("Svenska sv");
+        rbSv.setToggleGroup(group);
+        rbSv.setUserData("sv");
+
+        RadioButton rbDe = new RadioButton("Deutsch de");
+        rbDe.setToggleGroup(group);
+        rbDe.setUserData("de");
+
+        RadioButton rbEs = new RadioButton("Español es");
+        rbEs.setToggleGroup(group);
+        rbEs.setUserData("es");
+
+        switch (lang) {
+            case "en": rbEn.setSelected(true); break;
+            case "sv": rbSv.setSelected(true); break;
+            case "de": rbDe.setSelected(true); break;
+            case "es": rbEs.setSelected(true); break;
+            default: rbFi.setSelected(true); break;
+        }
+
+        box.getChildren().addAll(rbFi, rbEn, rbSv, rbDe, rbEs);
+        dialog.getDialogPane().setContent(box);
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == confirmButtonType) {
+                return (String) group.getSelectedToggle().getUserData();
+            }
+            return null;
+        });
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(selectedLang -> {
+            model.setLanguage(selectedLang);
+            model.saveState();
+            updateUI();
+        });
+    }
+
+    private void showHelpDialog() {
+        String lang = model.getLanguage();
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle(LanguageSupport.getTranslation("apuaDialogTitle", lang));
+        dialog.getDialogPane().getButtonTypes().add(new ButtonType(LanguageSupport.getTranslation("peruuta", lang), ButtonBar.ButtonData.CANCEL_CLOSE));
+
+        WebView webView = new WebView();
+        webView.setPrefSize(720, 600);
+
+        URL helpUrl = getClass().getResource("help/help_" + lang + ".html");
+        if (helpUrl != null) {
+            webView.getEngine().load(helpUrl.toExternalForm());
+        } else {
+            URL defaultUrl = getClass().getResource("help/help_en.html");
+            if (defaultUrl != null) {
+                webView.getEngine().load(defaultUrl.toExternalForm());
+            }
+        }
+
+        ScrollPane scrollPane = new ScrollPane();
+        scrollPane.setContent(webView);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+        dialog.getDialogPane().setContent(scrollPane);
+        dialog.setResizable(true);
+        dialog.showAndWait();
+    }
+
+    private void checkAndHandleGameOverState() {
+        if (model.getPhase() != LGameModel.GamePhase.GAME_OVER && !model.hasAnyLegalMoves(model.isRedTurn())) {
+            model.setPhase(LGameModel.GamePhase.GAME_OVER);
+            model.setWinnerIsRed(!model.isRedTurn());
+            
+            SavedGameState finishedGame = new SavedGameState(
+                String.valueOf(System.currentTimeMillis()),
+                new LPiece(model.getRedPiece().getCx(), model.getRedPiece().getCy(), model.getRedPiece().getOrientation(), model.getRedPiece().isRed()),
+                new LPiece(model.getBluePiece().getCx(), model.getBluePiece().getCy(), model.getBluePiece().getOrientation(), model.getBluePiece().isRed()),
+                new Point(model.getNeutral1().col, model.getNeutral1().row),
+                new Point(model.getNeutral2().col, model.getNeutral2().row),
+                model.isRedTurn(),
+                model.getPhase(),
+                model.isWinnerIsRed(),
+                model.getPlayer1Name(),
+                model.getPlayer2Name()
+            );
+            
+            boolean alreadyExists = false;
+            for (SavedGameState old : model.getFinishedGames()) {
+                if (old.redPiece.getCx() == finishedGame.redPiece.getCx() &&
+                    old.redPiece.getCy() == finishedGame.redPiece.getCy() &&
+                    old.redPiece.getOrientation() == finishedGame.redPiece.getOrientation() &&
+                    old.bluePiece.getCx() == finishedGame.bluePiece.getCx() &&
+                    old.bluePiece.getCy() == finishedGame.bluePiece.getCy() &&
+                    old.bluePiece.getOrientation() == finishedGame.bluePiece.getOrientation() &&
+                    old.neutral1.equals(finishedGame.neutral1) &&
+                    old.neutral2.equals(finishedGame.neutral2)) {
+                    alreadyExists = true;
+                    break;
+                }
+            }
+            if (!alreadyExists) {
+                model.getFinishedGames().add(finishedGame);
+            }
+            model.saveState();
         }
     }
 }

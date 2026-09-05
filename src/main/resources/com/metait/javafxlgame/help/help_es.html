@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ayuda del Juego L</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            color: #0f172a;
+        }
+        h1 {
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 10px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .caption {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Juego L</h1>
+
+    <h2>Jugabilidad y Controles</h2>
+    <p>Este juego puede almacenar sesiones de juego terminadas o inacabadas con la situación actual del juego. Selecciona esa opción en el menú para ver una lista de sesiones guardadas y sus tableros de juego. También puedes eliminar sesiones de juego antiguas pulsando la imagen de la papelera en la fila. Puedes seleccionar algún juego inacabado para continuar el juego donde los jugadores lo dejaron.</p>
+
+    <h3>Reglas y Controles</h3>
+    <p>En el juego, 2 jugadores tienen una pieza L cada uno. La pieza L del Jugador 1 es roja (marcada con el número blanco 1) y la pieza L del Jugador 2 es azul (marcada con el número blanco 2). Hay también 2 monedas negras neutrales en el tablero.</p>
+
+    <p>En este juego, la pieza L se conrola con el ratón y el teclado. Mueva el marco de contorno de la pieza L a la posición deseada con el puntero del ratón. Puede rotar el marco con la rueda de desplazamiento del ratón o con la tecla R (o el botón Rotar). Puede voltear el marco haciendo doble clic en él o usando la tecla F (o el botón Reflejar). Coloque la pieza L en las celdas deseadas haciendo clic con el ratón, y confirme el movimiento presionando la tecla V o Enter (o el botón Confirmar). Puede levantar la pieza L colocada de vuelta al puntero del ratón presionando la tecla de cancelación (Escape, C o Backspace). Después de mover la pieza L, opcionalmente puede mover una moneda haciendo clic en ella y luego haciendo clic en la celda vacía deseada, o bien omitir esta fase presionando la tecla S (o el botón Omitir).</p>
+
+    <div class="image-container">
+        <img src="L_Game_start_position.svg.png" alt="Posición Inicial de Juego L">
+        <div class="caption">Tablero del juego L y posición inicial, con piezas neutrales mostradas como discos negros.</div>
+    </div>
+
+    <h2>De Wikipedia</h2>
+    <p>El juego L es un sencillo juego de mesa de estrategia abstracta inventado por Edward de Bono. Fue introducido en su libro The Five-Day Course in Thinking (1967).</p>
+
+    <h3>Descripción</h3>
+    <p>El juego L es un juego para dos jugadores que se juega en un tablero de 4×4 casillas. Cada jugador tiene un tetrominó en forma de L de 3×2, y hay dos piezas neutrales de 1×1.</p>
+
+    <h3>Reglas</h3>
+    <p>En cada turno, un jugador debe primero mover su pieza L, y luego puede opcionalmente mover cualquiera de las piezas neutrales. El juego se gana dejando al oponente incapaz de mover su pieza L a una nueva posición.</p>
+
+    <p>Las piezas no pueden solaparse ni cubrir otras piezas, ni salirse del tablero. Al mover la pieza L, se levanta y se coloca en casillas vacías en cualquier lugar del tablero. Puede rotarse o incluso voltearse al hacerlo; la única regla es que debe terminar en una posición diferente de la posición en la que empezó, cubriendo así al menos una casilla que no cubría anteriormente. Para mover una pieza neutral, un jugador simplemente la levanta y la coloca en una casilla vacía en cualquier lugar del tablero.</p>
+
+    <h2>Estrategia</h2>
+    <p>Una estrategia básica es usar una pieza neutral y la propia pieza para bloquear un cuadrado de 3×3 en una esquina, y usar una pieza neutral para evitar que la pieza L del oponente cambie a una posición de imagen especular. Otra estrategia básica es mover una pieza L para bloquear la mitad del tablero, y usar las piezas neutrales para evitar las posibles posiciones alternativas del oponente.</p>
+    <p>Estas posiciones a menudo se pueden lograr una vez que se deja una pieza neutral en uno de los ocho espacios asesinos en el perímetro del tablero. Los espacios asesinos son los espacios en el perímetro, pero no en una esquina. En el siguiente movimiento, uno hace que el asesino previamente colocado sea parte de su cuadrado, o lo usa para bloquear una posición del perímetro, y hace un bloqueo de cuadrado o de medio tablero con su propia L y una pieza neutral movida.</p>
+
+    <h2>Análisis</h2>
+    <p>Todas las posiciones, mueve el Rojo, donde el Rojo perderá ante un Azul perfecto, y el número máximo de movimientos restantes para el Rojo. Al mirar un movimiento por delante y asegurarse de que nunca se termine en ninguna de las posiciones anteriores, uno puede evitar perder.</p>
+
+    <div class="image-container">
+        <img src="560px-L_Game_all_final_positions.svg.png" alt="Posiciones Perdedoras">
+        <div class="caption">Todas las posiciones, mueve el Rojo, donde el Rojo perderá ante un Azul perfecto.</div>
+    </div>
+
+    <p>Todas las posibles posiciones finales, el Azul ha ganado.</p>
+
+    <div class="image-container">
+        <img src="560px-L_Game_mate_positions.svg.png" alt="Posiciones de Mate">
+        <div class="caption">Todas las posibles posiciones finales (posiciones de mate) donde el Azul ha ganado.</div>
+    </div>
+
+    <p>En un juego con dos jugadores perfectos, ninguno ganará ni perderá nunca. El juego L es lo suficientemente pequeño como para ser completamente resoluble. Hay 2296 formas diferentes posibles de organizar las piezas, sin contar una rotación o reflejo de una disposición como una nueva disposición, y considerando las dos piezas neutrales como idénticas. Se puede llegar a cualquier disposición durante el juego, siendo el turno de cualquier jugador. Cada jugador ha perdido en 15 de estas disposiciones, si es el turno de ese jugador. Las disposiciones perdedoras implican que la pieza L del jugador que pierde toca una esquina. Cada jugador también perderá pronto ante un jugador perfecto en otras 14 disposiciones. Un jugador podrá al menos forzar un empate (jugando para siempre sin perder) desde las 2267 posiciones restantes.</p>
+    <p>Incluso si ningún jugador juega perfectamente, el juego defensivo puede continuar indefinidamente si los jugadores son demasiado cautelosos para mover una pieza neutral a las posiciones asesinas. Si ambos jugadores están en este nivel, una variante de las reglas de muerte súbita permite mover ambas piezas neutrales después de mover. Un jugador que pueda mirar tres movimientos por delante puede derrotar el juego defensivo usando las reglas estándar.</p>
+
+    <h2>Referencias</h2>
+    <p>"Games and Puzzles 1974-11: Iss 30". A H C Publications. Noviembre 1974.</p>
+    <p>de Bono, Edward (1967). "The L Game: Strategic Thinking". The Five-Day Course in Thinking. Basic Books Inc. pp. 149–206. LCCN 67027438.</p>
+    <p>Parlett, David (1999). "The L-Game". The Oxford History of Board Games. Oxford University Press Inc. pp. 161–62. ISBN 0-19-212998-8.</p>
+    <p>Pritchard, D. B. (1982). "The L Game". Brain Games. Penguin Books Ltd. pp. 107–12. ISBN 0-14-00-5682-3.</p>
+
+    <h2>Enlaces externos</h2>
+    <p>Juego L en el sitio oficial de Edward de Bono (archivado)</p>
+    <p>Juego L interactivo basado en la web escrito en JavaScript</p>
+</body>
+</html>

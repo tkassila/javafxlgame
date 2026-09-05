@@ -1,6 +1,7 @@
 module com.metait.javafxlgame {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.web;
 
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;

@@ -3,7 +3,7 @@ package com.metait.javafxlgame;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class HelloController {
+public class LGameController {
     @FXML
     private Label welcomeText;
 

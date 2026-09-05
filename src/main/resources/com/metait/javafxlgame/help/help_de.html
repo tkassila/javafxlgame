@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Hilfe zum L-Spiel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2, h3 {
+            color: #0f172a;
+        }
+        h1 {
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 10px;
+        }
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .caption {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-top: 8px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>L-Spiel</h1>
+
+    <h2>Spielablauf & Steuerung</h2>
+    <p>Dieses Spiel kann unvollendete und beendete Spielsitzungen mit aktuellen Spielsituationen speichern. Sie können einen Eintrag aus der Liste im Menü auswählen, um gespeicherte Sitzungen und deren Spielbretter anzuzeigen. Sie können auch ältere Spielsitzungen löschen, indem Sie auf das Mülleimer-Symbol in der Zeile klicken. Wählen Sie ein unvollendetes Spiel aus, um dort fortzufahren, wo die Spieler aufgehört haben.</p>
+
+    <h3>Regeln & Steuerung</h3>
+    <p>Im Spiel haben 2 Spieler jeweils ein L-Teil. Das L-Teil von Spieler 1 ist rot (gekennzeichnet mit der weißen Nummer 1) und das L-Teil von Spieler 2 ist blau (gekennzeichnet mit der weißen Nummer 2). Außerdem befinden sich 2 neutrale schwarze Münzen auf dem Brett.</p>
+
+    <p>In diesem Spiel wird das L-Teil mit der Maus und der Tastatur gesteuert. Bewegen Sie den Umrissrahmen des L-Teils mit dem Mauszeiger an die gewünschte Position. Sie können den Rahmen mit dem Mausrad oder der R-Taste (oder der Drehen-Schaltfläche) drehen. Sie können den Rahmen durch Doppelklick oder mit der F-Taste (oder der Spiegeln-Schaltfläche) spiegeln. Platzieren Sie das L-Teil durch Klicken mit der Maus in den gewünschten Feldern und bestätigen Sie den Zug durch Drücken der V- oder Enter-Taste (oder der Bestätigen-Schaltfläche). Sie können das platzierte L-Teil wieder auf den Mauszeiger zurückholen, indem Sie die Abbruch-Taste (Escape, C oder Backspace) drücken. Nach dem Bewegen des L-Teils können Sie optional eine Münze bewegen, indem Sie auf die Münze und dann auf das gewünschte leere Feld klicken, oder diesen Schritt durch Drücken der S-Taste (oder der Überspringen-Schaltfläche) überspringen.</p>
+
+    <div class="image-container">
+        <img src="L_Game_start_position.svg.png" alt="L-Spiel Startposition">
+        <div class="caption">L-Spielbrett und Startaufstellung, wobei neutrale Teile als schwarze Scheiben dargestellt sind.</div>
+    </div>
+
+    <h2>Aus Wikipedia</h2>
+    <p>Das L-Spiel ist ein einfaches abstraktes Strategie-Brettspiel, das von Edward de Bono erfunden wurde. Es wurde in seinem Buch The Five-Day Course in Thinking (1967) eingeführt.</p>
+
+    <h3>Beschreibung</h3>
+    <p>Das L-Spiel ist ein Spiel für zwei Spieler, das auf einem Brett mit 4×4 Quadraten gespielt wird. Jeder Spieler hat ein 3×2 L-förmiges Tetromino, und es gibt zwei 1×1 neutrale Teile.</p>
+
+    <h3>Regeln</h3>
+    <p>In jeder Runde muss ein Spieler zuerst sein L-Teil bewegen und kann dann optional eines der neutralen Teile bewegen. Das Spiel ist gewonnen, wenn der Gegner sein L-Teil nicht mehr auf eine neue Position bewegen kann.</p>
+
+    <p>Teile dürfen sich nicht überlappen oder andere Teile abdecken oder die Teile vom Brett lassen. Beim Bewegen des L-Teils wird es aufgehoben und dann in leere Quadrate an einer beliebigen Stelle auf dem Brett platziert. Es kann dabei gedreht oder sogar umgedreht werden; die einzige Regel ist, dass es an einer anderen Position enden muss als der Position, an der es gestartet ist – und somit mindestens ein Quadrat abdeckt, das es zuvor nicht abgedeckt hat. Um ein neutrales Teil zu bewegen, hebt ein Spieler es einfach auf und platziert es dann in einem leeren Quadrat an einer beliebigen Stelle auf dem Brett.</p>
+
+    <h2>Strategie</h2>
+    <p>Eine grundlegende Strategie besteht darin, ein neutrales Teil und das eigene Teil zu verwenden, um ein 3×3-Quadrat in einer Ecke zu blockieren, und ein neutrales Teil zu verwenden, um zu verhindern, dass das L-Teil des Gegners in eine spiegelbildliche Position wechselt. Eine andere grundlegende Strategie besteht darin, ein L-Teil zu bewegen, um eine Hälfte des Brettes zu blockieren, und die neutralen Teile zu verwenden, um die möglichen Ausweichpositionen des Gegners zu verhindern.</p>
+    <p>Diese Positionen können oft erreicht werden, wenn ein neutrales Teil in einem der acht Killer-Felder am Rand des Brettes gelassen wird. Die Killer-Felder sind die Felder am Rand, aber nicht in einer Ecke. Beim nächsten Zug macht man entweder den zuvor platzierten Killer zu einem Teil des eigenen Quadrats oder verwendet ihn, um eine Randposition zu blockieren, und erstellt mit dem eigenen L und einem bewegten neutralen Teil einen Quadrat- oder Halbbordblock.</p>
+
+    <h2>Analyse</h2>
+    <p>Alle Positionen, Rot am Zug, in denen Rot gegen ein perfektes Blau verliert, und die maximale Anzahl der für Rot verbleibenden Züge. Indem man einen Zug vorausblickt und sicherstellt, dass man nie in einer der oben genannten Positionen landet, kann man das Verlieren vermeiden.</p>
+
+    <div class="image-container">
+        <img src="560px-L_Game_all_final_positions.svg.png" alt="Verlierende Positionen">
+        <div class="caption">Alle Positionen, Rot am Zug, in denen Rot gegen ein perfektes Blau verliert.</div>
+    </div>
+
+    <p>Alle möglichen Endpositionen, Blau hat gewonnen.</p>
+
+    <div class="image-container">
+        <img src="560px-L_Game_mate_positions.svg.png" alt="Matt-Positionen">
+        <div class="caption">Alle möglichen Endpositionen (Matt-Positionen), in denen Blau gewonnen hat.</div>
+    </div>
+
+    <p>In einem Spiel mit zwei perfekten Spielern wird keiner jemals gewinnen oder verlieren. Das L-Spiel ist klein genug, um vollständig lösbar zu sein. Es gibt 2296 verschiedene mögliche gültige Arten, wie die Teile angeordnet werden können, wobei eine Drehung oder Spiegelung einer Anordnung nicht als neue Anordnung gezählt wird und die beiden neutralen Teile als identisch betrachtet werden. Jede Anordnung kann während des Spiels erreicht werden, wobei jeder Spieler am Zug sein kann. Jeder Spieler hat in 15 dieser Anordnungen verloren, wenn dieser Spieler am Zug ist. Die verlierenden Anordnungen beinhalten, dass das L-Teil des verlierenden Spielers eine Ecke berührt. Jeder Spieler wird auch bald gegen einen perfekten Spieler in weiteren 14 Anordnungen verlieren. Ein Spieler wird in der Lage sein, zumindest ein Unentschieden zu erzwingen (indem er ewig spielt, ohne zu verlieren) aus den verbleibenden 2267 Positionen.</p>
+    <p>Selbst wenn kein Spieler perfekt spielt, kann das defensive Spiel unbegrenzt fortgesetzt werden, wenn die Spieler zu vorsichtig sind, um ein neutrales Teil in die Killer-Positionen zu bewegen. Wenn beide Spieler auf diesem Niveau sind, erlaubt eine Sudden-Death-Variante der Regeln, beide neutralen Teile nach dem Bewegen zu bewegen. Ein Spieler, der drei Züge vorausblicken kann, kann das defensive Spiel nach den Standardregeln besiegen.[Klärung erforderlich]</p>
+
+    <h2>Referenzen</h2>
+    <p>"Games and Puzzles 1974-11: Iss 30". A H C Publications. November 1974.</p>
+    <p>de Bono, Edward (1967). "The L Game: Strategic Thinking". The Five-Day Course in Thinking. Basic Books Inc. pp. 149–206. LCCN 67027438.</p>
+    <p>Parlett, David (1999). "The L-Game". The Oxford History of Board Games. Oxford University Press Inc. pp. 161–62. ISBN 0-19-212998-8.</p>
+    <p>Pritchard, D. B. (1982). "The L-Game". Brain Games. Penguin Books Ltd. pp. 107–12. ISBN 0-14-00-5682-3.</p>
+
+    <h2>Externe Links</h2>
+    <p>L-Spiel auf der offiziellen Seite von Edward de Bono (archiviert)</p>
+    <p>Interaktives webbasiertes L-Spiel, geschrieben in JavaScript</p>
+</body>
+</html>
