@@ -185,8 +185,10 @@ public class LGameApplication extends Application {
         // Create Scene and load stylesheets
         Scene scene = new Scene(root, 560, 740);
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-        
-        String customStyle = LGameApplication.class.getResource("style.css").toExternalForm();
+
+        URL styleUrl2 = LGameApplication.class.getResource("/");
+        URL styleUrl = LGameApplication.class.getResource("style.css");
+        String customStyle = styleUrl.toExternalForm();
         if (customStyle != null) {
             scene.getStylesheets().add(customStyle);
         }
